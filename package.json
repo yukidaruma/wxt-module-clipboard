@@ -1,12 +1,62 @@
 {
-  "name": "app",
-  "module": "index.ts",
+  "name": "wxt-module-clipboard",
+  "description": "WXT module to enable clipboard operations using Chrome's offscreen API",
+  "version": "0.1.0",
   "type": "module",
-  "private": true,
-  "devDependencies": {
-    "@types/bun": "latest"
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./client": {
+      "import": {
+        "types": "./dist/client.d.mts",
+        "default": "./dist/client.mjs"
+      },
+      "require": {
+        "types": "./dist/client.d.cts",
+        "default": "./dist/client.cjs"
+      }
+    },
+    "./background-plugin": {
+      "import": {
+        "types": "./dist/background-plugin.d.mts",
+        "default": "./dist/background-plugin.mjs"
+      },
+      "require": {
+        "types": "./dist/background-plugin.d.cts",
+        "default": "./dist/background-plugin.cjs"
+      }
+    }
   },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --watch"
+  },
+  "keywords": [
+    "wxt"
+  ],
+  "license": "MIT",
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^5",
+    "wxt": ">=0.19.16"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.277",
+    "typescript": "^5",
+    "unbuild": "^3.6.1",
+    "wxt": "^0.19.16"
   }
 }
