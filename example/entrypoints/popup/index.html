@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Clipboard Example</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        width: 300px;
+        padding: 16px;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      body > * + * {
+        margin-top: 12px;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 0;
+      }
+      textarea {
+        width: 100%;
+        height: 100px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        font-family: inherit;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background: #4285f4;
+        color: white;
+        border: none;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      button:hover {
+        background: #357ae8;
+      }
+      button:active {
+        background: #2a5db0;
+      }
+      #status {
+        padding: 8px;
+        font-size: 13px;
+        text-align: center;
+        display: none;
+      }
+      #status.success {
+        background: #d4edda;
+        color: #155724;
+        display: block;
+      }
+      #status.error {
+        background: #f8d7da;
+        color: #721c24;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Clipboard Module Example</h1>
+    <textarea id="textInput" placeholder="Enter text to copy...">
+Hello from WXT Clipboard Module!</textarea
+    >
+    <button id="copyBtn">Copy to Clipboard</button>
+    <div id="status"></div>
+    <script src="popup.js" type="module"></script>
+  </body>
+</html>

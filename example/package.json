@@ -1,0 +1,17 @@
+{
+  "name": "wxt-module-clipboard-example",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.277",
+    "typescript": "^5",
+    "wxt": "^0.20.11",
+    "wxt-module-clipboard": "0.1.0"
+  }
+}
