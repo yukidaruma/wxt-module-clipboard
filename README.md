@@ -2,7 +2,7 @@
 
 [![npm](https://badgen.net/npm/v/wxt-module-clipboard)](https://www.npmjs.com/package/wxt-module-clipboard)
 
-WXT module for easier clipboard writing using Chrome's offscreen API. Adds &lt;2kB to your extension (uncompressed). Works in
+WXT module for easier clipboard writing using Chrome's offscreen API. Adds &lt;2kB to your extension (uncompressed).
 
 This module automatically adds the `offscreen` and `clipboardWrite` permissions to your extension manifest.
 
@@ -139,6 +139,11 @@ type ClipboardResponse = {
 ## Caveat
 
 Does not work on Firefox because the offscreen document API is not yet standardized (See: https://github.com/w3c/webextensions/issues/170).
+
+## Resources
+
+- [WXT Modules - wxt.dev](https://wxt.dev/guide/essentials/wxt-modules.html)
+- [My guide on building WXT modules](https://yuki.games/blog/extending-wxt-by-module) (written in Japanese)
 
 ## License
 
