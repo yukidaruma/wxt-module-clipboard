@@ -9,7 +9,7 @@
     "zip": "wxt zip"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.277",
+    "@types/chrome": "^0.1.24",
     "typescript": "^5",
     "wxt": "^0.20.11",
     "wxt-module-clipboard": "0.1.2"

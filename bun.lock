@@ -4,7 +4,7 @@
     "": {
       "name": "app",
       "devDependencies": {
-        "@types/chrome": "^0.0.277",
+        "@types/chrome": "^0.1.24",
         "typescript": "^5",
         "unbuild": "^3.6.1",
         "wxt": "^0.19.16",
@@ -164,7 +164,7 @@
 
     "@rollup/rollup-win32-x64-msvc": ["@rollup/rollup-win32-x64-msvc@4.52.5", "", { "os": "win32", "cpu": "x64" }, "sha512-TAcgQh2sSkykPRWLrdyy2AiceMckNf5loITqXxFI5VuQjS5tSuw3WlwdN8qv8vzjLAUTvYaH/mVjSFpbkFbpTg=="],
 
-    "@types/chrome": ["@types/chrome@0.0.277", "", { "dependencies": { "@types/filesystem": "*", "@types/har-format": "*" } }, "sha512-qoTgBcDWblSsX+jvFnpUlLUE3LAuOhZfBh9MyMWMQHDsQiYVgBvdZWu9COrdB9+aNnInEyXcFgfc2HE16sdSYQ=="],
+    "@types/chrome": ["@types/chrome@0.1.24", "", { "dependencies": { "@types/filesystem": "*", "@types/har-format": "*" } }, "sha512-9iO9HL2bMeGS4C8m6gNFWUyuPE5HEUFk+rGh+7oriUjg+ata4Fc9PoVlu8xvGm7yoo3AmS3J6fAjoFj61NL2rw=="],
 
     "@types/estree": ["@types/estree@1.0.8", "", {}, "sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w=="],
 
