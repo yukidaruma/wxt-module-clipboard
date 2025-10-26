@@ -2,7 +2,9 @@
 
 [![npm](https://badgen.net/npm/v/wxt-module-clipboard)](https://www.npmjs.com/package/wxt-module-clipboard)
 
-WXT module for easy clipboard writing from content scripts using Chrome's offscreen API. Adds &lt;2kB to your extension (uncompressed).
+WXT module for easier clipboard writing using Chrome's offscreen API. Adds &lt;2kB to your extension (uncompressed). Works in
+
+This module automatically adds the `offscreen` and `clipboardWrite` permissions to your extension manifest.
 
 ## Installation
 
@@ -55,6 +57,15 @@ if (!granted) {
 
 See [Chrome Extensions documentation](https://developer.chrome.com/docs/extensions/reference/api/permissions#step_3_request_optional_permissions) for more information.
 
+## How it works
+
+- Automatically creates offscreen document files (`offscreen-clipboard.html` and `offscreen-clipboard.js`)
+- Injects message listener into background script only (tree-shaken from other entrypoints to reduce bundle size)
+- Handles message routing through:
+  - Content scripts =&gt; Background: Sends `{ type: "clipboard-write", text: "..." }`
+  - Background =&gt; Offscreen document: Sends `{ type: "clipboard-write-offscreen", text: "..." }`
+  - Offscreen document: Executes `document.execCommand('copy')` to write to the clipboard
+
 ## Usage
 
 The module exports two functions:
@@ -96,15 +107,13 @@ document.getElementById("copyBtn").addEventListener("click", async () => {
 });
 ```
 
-Under the hood, this function sends a message (`{ type: "clipboard-write", text: "..." }`) to the background script, which then uses the offscreen document to write to the clipboard.
-
 ### `copyToClipboardViaOffscreen(text)` - For background scripts
 
 ```ts
 // entrypoints/background.ts
 import { copyToClipboardViaOffscreen } from "wxt-module-clipboard/client";
 
-export default defineBackground(() => {
+export default defineBackground(async () => {
   const response = await copyToClipboardViaOffscreen("Hello, clipboard!");
   if (response.success) {
     console.log("Copied!");
@@ -114,7 +123,7 @@ export default defineBackground(() => {
 });
 ```
 
-This function directly creates an offscreen document and writes to the clipboard. Use this only in background scripts, as the message-passing approach is designed for other contexts.
+This function directly creates an offscreen document and writes to the clipboard. Use this only in background scripts, as background scripts can directly create offscreen documents, while content scripts cannot.
 
 ### Response Type
 
@@ -127,14 +136,10 @@ type ClipboardResponse = {
 };
 ```
 
-## How it works
-
-- Automatically creates offscreen document files (`offscreen-clipboard.html` and `offscreen-clipboard.js`)
-- Injects `modules/background-plugin.ts` only into the background entrypoint to listen for messages from content scripts
-  - Plugin scripts are typically loaded into all entrypoints; however, tree-shaking ensures this module only injects into the background script, keeping other entrypoints lightweight
-- Handles message routing from content scripts => background => offscreen document using `clipboard-write` and `clipboard-write-offscreen` message types
-  - In the offscreen document, `document.execCommand('copy')` is used to write to the clipboard
-
 ## Caveat
 
 Does not work on Firefox because the offscreen document API is not yet standardized (See: https://github.com/w3c/webextensions/issues/170).
+
+## License
+
+wxt-module-clipboard is released under the MIT license. See [LICENSE](LICENSE) for details.
