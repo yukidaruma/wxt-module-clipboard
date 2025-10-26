@@ -6,7 +6,4 @@ export default defineBuildConfig({
   outDir: resolve(__dirname, "dist"),
   entries: ["index.ts", "client.ts", "background-plugin.ts"],
   declaration: true,
-  rollup: {
-    emitCJS: true,
-  },
 });
