@@ -1,3 +1,9 @@
+import {
+  MESSAGE_TYPE_CLIPBOARD_WRITE,
+  MESSAGE_TYPE_CLIPBOARD_WRITE_OFFSCREEN,
+  OFFSCREEN_DOCUMENT_HTML,
+} from "./constants";
+
 /**
  * Response object from clipboard operations
  */
@@ -30,7 +36,7 @@ export async function copyToClipboard(
   text: string
 ): Promise<ClipboardResponse> {
   return chrome.runtime.sendMessage({
-    type: "clipboard-write",
+    type: MESSAGE_TYPE_CLIPBOARD_WRITE,
     text: text,
   });
 }
@@ -59,10 +65,10 @@ export async function copyToClipboard(
 export async function copyToClipboardViaOffscreen(
   text: string
 ): Promise<ClipboardResponse> {
-  await setupOffscreenDocument("offscreen-clipboard.html");
+  await setupOffscreenDocument(OFFSCREEN_DOCUMENT_HTML);
 
   const response = await chrome.runtime.sendMessage({
-    type: "clipboard-write-offscreen",
+    type: MESSAGE_TYPE_CLIPBOARD_WRITE_OFFSCREEN,
     data: text,
   });
 
@@ -85,7 +91,7 @@ export async function copyToClipboardViaOffscreen(
  */
 export function setupClipboard() {
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-    if (message.type !== "clipboard-write") {
+    if (message.type !== MESSAGE_TYPE_CLIPBOARD_WRITE) {
       return;
     }
 

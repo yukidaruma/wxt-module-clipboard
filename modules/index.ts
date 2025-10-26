@@ -1,5 +1,10 @@
 import "wxt";
 import { addWxtPlugin, defineWxtModule } from "wxt/modules";
+import {
+  MESSAGE_TYPE_CLIPBOARD_WRITE_OFFSCREEN,
+  OFFSCREEN_DOCUMENT_HTML,
+  OFFSCREEN_DOCUMENT_JS,
+} from "./constants";
 
 export type ClipboardModuleOptions = {
   /**
@@ -60,16 +65,15 @@ export default defineWxtModule<ClipboardModuleOptions>({
     // Add offscreen HTML asset
     wxt.hook("build:publicAssets", (_, assets) => {
       assets.push({
-        relativeDest: "offscreen-clipboard.html",
-        contents:
-          '<!DOCTYPE html><textarea id="text"></textarea><script src="offscreen-clipboard.js" type="module"></script>',
+        relativeDest: OFFSCREEN_DOCUMENT_HTML,
+        contents: `<!DOCTYPE html><textarea id="text"></textarea><script src="${OFFSCREEN_DOCUMENT_JS}" type="module"></script>`,
       });
       assets.push({
-        relativeDest: "offscreen-clipboard.js",
+        relativeDest: OFFSCREEN_DOCUMENT_JS,
         contents: `const textarea = document.getElementById("text");
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type !== "clipboard-write-offscreen") {
+  if (message.type !== "${MESSAGE_TYPE_CLIPBOARD_WRITE_OFFSCREEN}") {
     return;
   }
 
