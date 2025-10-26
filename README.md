@@ -27,6 +27,34 @@ export default defineConfig({
 });
 ```
 
+### Configuration
+
+You can configure the module to use `optional_permissions` instead of `permissions`:
+
+```ts
+// wxt.config.ts
+export default defineConfig({
+  modules: ["wxt-module-clipboard"],
+  clipboard: {
+    optionalPermissions: true, // Use optional_permissions instead of permissions
+  },
+});
+```
+
+When `optionalPermissions` is set to `true`, the `offscreen` and `clipboardWrite` permissions will be added to `optional_permissions` in the manifest. This allows users to grant clipboard access on demand using [`chrome.permissions.request()`](https://developer.chrome.com/docs/extensions/reference/api/permissions#method-request).
+
+```ts
+const granted = await chrome.permissions.request({
+  permissions: ["offscreen", "clipboardWrite"],
+});
+if (!granted) {
+  console.error("Permission denied");
+  return;
+}
+```
+
+See [Chrome Extensions documentation](https://developer.chrome.com/docs/extensions/reference/api/permissions#step_3_request_optional_permissions) for more information.
+
 ## Usage
 
 The module exports two functions:

@@ -1,9 +1,26 @@
 import "wxt";
 import { addWxtPlugin, defineWxtModule } from "wxt/modules";
 
-export default defineWxtModule({
+export type ClipboardModuleOptions = {
+  /**
+   * If true, permissions will be added to optional_permissions instead of permissions.
+   *
+   * **Note**: You need to manually request permissions using `chrome.permissions.request()` before calling the clipboard functions.
+   * @default false
+   */
+  optionalPermissions?: boolean;
+};
+
+declare module "wxt" {
+  export interface InlineConfig {
+    clipboard?: ClipboardModuleOptions;
+  }
+}
+
+export default defineWxtModule<ClipboardModuleOptions>({
   name: "@wxt-dev/module-clipboard",
-  setup(wxt) {
+  configKey: "clipboard",
+  setup(wxt, options) {
     // Add background plugin
     const pluginModuleId = "wxt-module-clipboard/background-plugin";
     addWxtPlugin(wxt, pluginModuleId);
@@ -27,11 +44,17 @@ export default defineWxtModule({
 
     // Add manifest permissions
     wxt.hook("build:manifestGenerated", (_wxt, manifest) => {
-      manifest.permissions = manifest.permissions || [];
-      for (const permission of ["offscreen", "clipboardWrite"])
-        if (!manifest.permissions.includes(permission)) {
-          manifest.permissions.push(permission);
+      const useOptionalPermissions = options?.optionalPermissions ?? false;
+      const permissionsArray = useOptionalPermissions
+        ? "optional_permissions"
+        : "permissions";
+
+      manifest[permissionsArray] = manifest[permissionsArray] || [];
+      for (const permission of ["offscreen", "clipboardWrite"]) {
+        if (!manifest[permissionsArray].includes(permission)) {
+          manifest[permissionsArray].push(permission);
         }
+      }
     });
 
     // Add offscreen HTML asset
