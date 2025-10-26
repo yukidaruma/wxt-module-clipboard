@@ -1,27 +1,79 @@
 /**
- * Copies text to the clipboard using Chrome's offscreen document API.
- * Creates an offscreen document if needed, then sends a message to it to perform the clipboard write.
+ * Response object from clipboard operations
+ */
+export type ClipboardResponse = {
+  success: boolean;
+  error?: string;
+};
+
+/**
+ * Copies text to the clipboard from any entrypoint (content script, popup, etc.).
+ * Sends a message to the background script which handles the clipboard write via offscreen document.
+ * **Note**: Use `copyToClipboardViaOffscreen` directly in background scripts.
  *
  * @param text - text to copy to the clipboard
+ * @returns Promise that resolves with response object containing success status and optional error message
+ *
+ * @example
+ * ```ts
+ * import { copyToClipboard } from "wxt-module-clipboard/client";
+ *
+ * const response = await copyToClipboard("Hello, clipboard!");
+ * if (response.success) {
+ *   console.log("Copied!");
+ * } else {
+ *   console.error("Error: " + response.error);
+ * }
+ * ```
  */
-async function copyToClipboard(text: string): Promise<void> {
+export async function copyToClipboard(
+  text: string
+): Promise<ClipboardResponse> {
+  return chrome.runtime.sendMessage({
+    type: "clipboard-write",
+    text: text,
+  });
+}
+
+/**
+ * Copies text to the clipboard via offscreen document from background script.
+ * Creates an offscreen document if needed, then sends a message to it to perform the clipboard write.
+ * **Note**: Use `copyToClipboard` in non-background entrypoints (content scripts, popups, etc.).
+ *
+ * @param text - text to copy to the clipboard
+ * @returns Promise that resolves with response object containing success status and optional error message
+ *
+ * @example
+ * ```ts
+ * import { copyToClipboardViaOffscreen } from "wxt-module-clipboard/client";
+ *
+ * // In background script
+ * const response = await copyToClipboardViaOffscreen("Hello, clipboard!");
+ * if (response.success) {
+ *   console.log("Copied!");
+ * } else {
+ *   console.error("Error:", response.error);
+ * }
+ * ```
+ */
+export async function copyToClipboardViaOffscreen(
+  text: string
+): Promise<ClipboardResponse> {
   await setupOffscreenDocument("offscreen-clipboard.html");
 
-  return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage(
-      {
-        type: "clipboard-write-offscreen",
-        data: text,
-      },
-      (response) => {
-        if (response?.success) {
-          resolve();
-        } else {
-          reject(new Error(response?.error || "Failed to copy"));
-        }
-      }
-    );
+  const response = await chrome.runtime.sendMessage({
+    type: "clipboard-write-offscreen",
+    data: text,
   });
+
+  if (response?.success) {
+    return { success: true };
+  } else {
+    return {
+      success: false,
+      error: response?.error || "Failed to copy to clipboard: unknown error",
+    };
+  }
 }
 
 /**
@@ -37,10 +89,8 @@ export function setupClipboard() {
       return;
     }
 
-    copyToClipboard(message.text)
-      .then(() => {
-        sendResponse({ success: true });
-      })
+    copyToClipboardViaOffscreen(message.text)
+      .then(sendResponse)
       .catch((error) => {
         sendResponse({ success: false, error: error.message });
       });

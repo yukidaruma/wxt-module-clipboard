@@ -1,3 +1,5 @@
+import { copyToClipboard } from "wxt-module-clipboard/client";
+
 let timeoutId;
 
 document.getElementById("copyBtn").addEventListener("click", async () => {
@@ -11,10 +13,7 @@ document.getElementById("copyBtn").addEventListener("click", async () => {
   }
 
   try {
-    const response = await chrome.runtime.sendMessage({
-      type: "clipboard-write",
-      text: text,
-    });
+    const response = await copyToClipboard(text);
 
     if (response.success) {
       status.textContent = "Text copied to clipboard!";
