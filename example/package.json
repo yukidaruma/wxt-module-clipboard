@@ -1,6 +1,6 @@
 {
   "name": "wxt-module-clipboard-example",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "private": true,
   "scripts": {
@@ -12,6 +12,6 @@
     "@types/chrome": "^0.0.277",
     "typescript": "^5",
     "wxt": "^0.20.11",
-    "wxt-module-clipboard": "0.1.1"
+    "wxt-module-clipboard": "0.1.2"
   }
 }

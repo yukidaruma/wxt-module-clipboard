@@ -1,6 +1,6 @@
 {
   "name": "wxt-module-clipboard",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "WXT module for easy clipboard writing from content scripts using Chrome's offscreen API",
   "keywords": [
     "wxt"
